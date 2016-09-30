@@ -139,6 +139,7 @@ public class AnalizadorLexico implements AnalizadorLexicoConstants {
       case ESTILO:
       case FONDO:
       case COLOR:
+      case BORDE:
       case FUENTE:
       case TAMFUENTE:
       case TEXTO:
@@ -150,12 +151,15 @@ public class AnalizadorLexico implements AnalizadorLexicoConstants {
       case SELECCIONADO:
       case INICIO:
       case FIN:
+      case TAMPX:
       case SOLID:
+      case NUMCOLOR:
       case NUMERO:
       case IDENTIFICADOR:
       case ASIGNACIONGUION:
       case CONCATENACION:
       case LLAMADOMET:
+      case DIVITEM:
       case ININEGRILLA:
       case FINNEGRILLA:
       case NOMBREARCHIVO:
@@ -213,6 +217,11 @@ public class AnalizadorLexico implements AnalizadorLexicoConstants {
     numero++;
     grabarDatosPieza(numero, "ID", pieza);
       break;
+    case TAMPX:
+      pieza = jj_consume_token(TAMPX);
+    numero++;
+    grabarDatosPieza(numero, "TAMA\u00d1O FUENTE", pieza);
+      break;
     case ESTILO:
       pieza = jj_consume_token(ESTILO);
     numero++;
@@ -227,6 +236,16 @@ public class AnalizadorLexico implements AnalizadorLexicoConstants {
       pieza = jj_consume_token(COLOR);
     numero++;
     grabarDatosPieza(numero, "COLOR", pieza);
+      break;
+    case BORDE:
+      pieza = jj_consume_token(BORDE);
+    numero++;
+    grabarDatosPieza(numero, "BORDE", pieza);
+      break;
+    case NUMCOLOR:
+      pieza = jj_consume_token(NUMCOLOR);
+    numero++;
+    grabarDatosPieza(numero, "COLOR HEXADECIMAL", pieza);
       break;
     case FUENTE:
       pieza = jj_consume_token(FUENTE);
@@ -333,6 +352,11 @@ public class AnalizadorLexico implements AnalizadorLexicoConstants {
     numero++;
     grabarDatosPieza(numero, "CERRAR NEGRILLA", pieza);
       break;
+    case DIVITEM:
+      pieza = jj_consume_token(DIVITEM);
+    numero++;
+    grabarDatosPieza(numero, "DIVISOR DE ITEMS", pieza);
+      break;
     default:
       jj_la1[1] = jj_gen;
       jj_consume_token(-1);
@@ -358,10 +382,10 @@ public class AnalizadorLexico implements AnalizadorLexicoConstants {
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0xbfffff00,0xbfffff00,};
+      jj_la1_0 = new int[] {0xffffff00,0xffffff00,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0xff4,0xff4,};
+      jj_la1_1 = new int[] {0x3feb,0x3feb,};
    }
 
   /** Constructor with InputStream. */
@@ -499,7 +523,7 @@ public class AnalizadorLexico implements AnalizadorLexicoConstants {
   /** Generate ParseException. */
   static public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[44];
+    boolean[] la1tokens = new boolean[46];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
@@ -516,7 +540,7 @@ public class AnalizadorLexico implements AnalizadorLexicoConstants {
         }
       }
     }
-    for (int i = 0; i < 44; i++) {
+    for (int i = 0; i < 46; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;

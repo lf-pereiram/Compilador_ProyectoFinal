@@ -198,6 +198,11 @@ TOKEN : /*Color*/
   < COLOR : "color" >
 }
 
+TOKEN : /*Borde*/
+{
+  < BORDE : "borde" >
+}
+
 TOKEN : /*Fuente*/
 {
   < FUENTE : "fuente" >
@@ -255,7 +260,7 @@ TOKEN : /*Fin*/
 
 TOKEN : /*TamanoFuente*/
 {
-  < TAMPX : (< DIGIT >)+ "px" >
+  < TAMPX : (< DIGIT >)+ ("px") >
 }
 
 TOKEN : /*Solid*/
@@ -287,6 +292,11 @@ TOKEN : /*OPERADOR RELACIONAL*/
 | < LLAMADOMET 		: "." >
 }
 
+TOKEN : /*Division de items en una lista*/
+{
+  < DIVITEM 	: ":" >
+}
+
 TOKEN : /*Negrilla*/
 {
   < ININEGRILLA : 	"(" >
@@ -300,7 +310,7 @@ TOKEN : /*Nombre de Archivo*/
 
 TOKEN : /*Cadena*/
 {
-  < CADENA : 		("\"") "<" (~[ "\"" ])* ">" ("\"") >
+  < CADENA : ("\"") (~[ "\"" ])* ("\"") >
 }
 
 /**
@@ -361,6 +371,11 @@ void TokenElement() :
     numero++;
     grabarDatosPieza(numero, "ID", pieza);
   }
+| pieza = < TAMPX >
+  {
+    numero++;
+    grabarDatosPieza(numero, "TAMAÑO FUENTE", pieza);
+  }
 | pieza = < ESTILO >
   {
     numero++;
@@ -375,6 +390,16 @@ void TokenElement() :
   {
     numero++;
     grabarDatosPieza(numero, "COLOR", pieza);
+  }
+| pieza = < BORDE >
+  {
+    numero++;
+    grabarDatosPieza(numero, "BORDE", pieza);
+  }
+| pieza = < NUMCOLOR >
+  {
+    numero++;
+    grabarDatosPieza(numero, "COLOR HEXADECIMAL", pieza);
   }
 | pieza = < FUENTE >
   {
@@ -480,5 +505,10 @@ void TokenElement() :
   {
     numero++;
     grabarDatosPieza(numero, "CERRAR NEGRILLA", pieza);
+  }
+| pieza = < DIVITEM >
+  {
+    numero++;
+    grabarDatosPieza(numero, "DIVISOR DE ITEMS", pieza);
   }
 }

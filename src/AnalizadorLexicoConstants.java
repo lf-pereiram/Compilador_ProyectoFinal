@@ -31,55 +31,59 @@ public interface AnalizadorLexicoConstants {
   /** RegularExpression Id. */
   int COLOR = 18;
   /** RegularExpression Id. */
-  int FUENTE = 19;
+  int BORDE = 19;
   /** RegularExpression Id. */
-  int TAMFUENTE = 20;
+  int FUENTE = 20;
   /** RegularExpression Id. */
-  int TEXTO = 21;
+  int TAMFUENTE = 21;
   /** RegularExpression Id. */
-  int MUESTRA = 22;
+  int TEXTO = 22;
   /** RegularExpression Id. */
-  int VALOR = 23;
+  int MUESTRA = 23;
   /** RegularExpression Id. */
-  int CANTIDAD = 24;
+  int VALOR = 24;
   /** RegularExpression Id. */
-  int VALORINTERNO = 25;
+  int CANTIDAD = 25;
   /** RegularExpression Id. */
-  int VALOREXTERNO = 26;
+  int VALORINTERNO = 26;
   /** RegularExpression Id. */
-  int SELECCIONADO = 27;
+  int VALOREXTERNO = 27;
   /** RegularExpression Id. */
-  int INICIO = 28;
+  int SELECCIONADO = 28;
   /** RegularExpression Id. */
-  int FIN = 29;
+  int INICIO = 29;
   /** RegularExpression Id. */
-  int TAMPX = 30;
+  int FIN = 30;
   /** RegularExpression Id. */
-  int SOLID = 31;
+  int TAMPX = 31;
   /** RegularExpression Id. */
-  int NUMCOLOR = 32;
+  int SOLID = 32;
   /** RegularExpression Id. */
-  int NCOL = 33;
+  int NUMCOLOR = 33;
   /** RegularExpression Id. */
-  int NUMERO = 34;
+  int NCOL = 34;
   /** RegularExpression Id. */
-  int DIGIT = 35;
+  int NUMERO = 35;
   /** RegularExpression Id. */
-  int IDENTIFICADOR = 36;
+  int DIGIT = 36;
   /** RegularExpression Id. */
-  int ASIGNACIONGUION = 37;
+  int IDENTIFICADOR = 37;
   /** RegularExpression Id. */
-  int CONCATENACION = 38;
+  int ASIGNACIONGUION = 38;
   /** RegularExpression Id. */
-  int LLAMADOMET = 39;
+  int CONCATENACION = 39;
   /** RegularExpression Id. */
-  int ININEGRILLA = 40;
+  int LLAMADOMET = 40;
   /** RegularExpression Id. */
-  int FINNEGRILLA = 41;
+  int DIVITEM = 41;
   /** RegularExpression Id. */
-  int NOMBREARCHIVO = 42;
+  int ININEGRILLA = 42;
   /** RegularExpression Id. */
-  int CADENA = 43;
+  int FINNEGRILLA = 43;
+  /** RegularExpression Id. */
+  int NOMBREARCHIVO = 44;
+  /** RegularExpression Id. */
+  int CADENA = 45;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -105,6 +109,7 @@ public interface AnalizadorLexicoConstants {
     "\"estilo\"",
     "\"fondo\"",
     "\"color\"",
+    "\"borde\"",
     "\"fuente\"",
     "\"tamFuente\"",
     "\"texto\"",
@@ -126,6 +131,7 @@ public interface AnalizadorLexicoConstants {
     "<ASIGNACIONGUION>",
     "\"+\"",
     "\".\"",
+    "\":\"",
     "\"(\"",
     "\")\"",
     "<NOMBREARCHIVO>",
