@@ -6,14 +6,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-
 import javax.swing.JOptionPane;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class AnalizadorLexico implements AnalizadorLexicoConstants {
   static int numero = 0;
-
 
   private static void grabarLexema(int n, String token, String lexema, int nL, int nC)
   {
@@ -32,10 +30,8 @@ public class AnalizadorLexico implements AnalizadorLexicoConstants {
   {
     System.out.println("---------- INICIANDO AN\u00c1LISIS L\u00c9XICO ----------");
     System.out.println("Ingrese el c\u00f3digo a analizar:");
-
     AnalizadorLexico parser = new AnalizadorLexico(System.in);
     parser.TokenList();
-
     System.out.println("Analisis terminado:");
     System.out.println("no se han hallado errores l\u00e9xicos");
   }
@@ -47,22 +43,18 @@ public class AnalizadorLexico implements AnalizadorLexicoConstants {
   {
     /**llamamos el metodo que permite cargar la ventana*/
     JFileChooser file = new JFileChooser();
-    FileNameExtensionFilter filtro=new FileNameExtensionFilter("SHTML","shtml");
+    FileNameExtensionFilter filtro = new FileNameExtensionFilter("SHTML", "shtml");
     file.setFileFilter(filtro);
     file.showOpenDialog(null);
-
     /**abrimos el archivo seleccionado*/
     File abre = file.getSelectedFile();
-
     String nombreArchivo = "";
     String texto = "";
     String aux = "";
-
     /**recorremos el archivo, lo leemos para plasmarlo en el area de texto*/
     if (abre != null)
     {
-      nombreArchivo=abre.getName();
-
+      nombreArchivo = abre.getName();
       FileReader archivos = new FileReader(abre);
       BufferedReader lee = new BufferedReader(archivos);
       while ((aux = lee.readLine()) != null)
@@ -70,17 +62,12 @@ public class AnalizadorLexico implements AnalizadorLexicoConstants {
         texto += aux + "\u005cn";
       }
       lee.close();
-
     }
-
     InputStream stream = new ByteArrayInputStream(texto.getBytes(StandardCharsets.UTF_8));
-
     System.out.println("---------- INICIANDO AN\u00c1LISIS L\u00c9XICO PARA EL ARCHIVO " + nombreArchivo + " ----------");
     System.out.println("Ingrese el c\u00f3digo a analizar:");
-
     AnalizadorLexico parser = new AnalizadorLexico(stream);
     parser.TokenList();
-
     System.out.println("Analisis terminado:");
     System.out.println("no se han hallado errores l\u00e9xicos");
   }
@@ -102,19 +89,15 @@ public class AnalizadorLexico implements AnalizadorLexicoConstants {
         "Bienvenido", "Como deseas analizar el codigo fuente?"
       }
       ;
-
       int variable = JOptionPane.showOptionDialog(null, mensajes,
       "Analizador Lexico", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
       null, botones, botones [2]);
-
       switch (variable)
       {
         case 0 | - 1 : System.exit(0);
         break;
-
         case 1 : leerConsola();
         break;
-
         case 2 : leerArchivo();
         break;
       }
@@ -167,18 +150,16 @@ public class AnalizadorLexico implements AnalizadorLexicoConstants {
       case SELECCIONADO:
       case INICIO:
       case FIN:
-      case TAMPX:
       case SOLID:
-      case NUMCOLOR:
+      case NUMERO:
       case IDENTIFICADOR:
-      case ASIGNACIONPUNTO:
       case ASIGNACIONGUION:
       case CONCATENACION:
-      case FINLINEA:
-      case CADENA:
+      case LLAMADOMET:
+      case ININEGRILLA:
+      case FINNEGRILLA:
       case NOMBREARCHIVO:
-      case COMENTARIO:
-      case NEGRILLA:
+      case CADENA:
         ;
         break;
       default:
@@ -292,20 +273,10 @@ public class AnalizadorLexico implements AnalizadorLexicoConstants {
     numero++;
     grabarDatosPieza(numero, "SELECCIONADO", pieza);
       break;
-    case TAMPX:
-      pieza = jj_consume_token(TAMPX);
-    numero++;
-    grabarDatosPieza(numero, "TAM. PX", pieza);
-      break;
     case SOLID:
       pieza = jj_consume_token(SOLID);
     numero++;
     grabarDatosPieza(numero, "SOLID", pieza);
-      break;
-    case NUMCOLOR:
-      pieza = jj_consume_token(NUMCOLOR);
-    numero++;
-    grabarDatosPieza(numero, "ESP. COLOR", pieza);
       break;
     case INICIO:
       pieza = jj_consume_token(INICIO);
@@ -322,25 +293,20 @@ public class AnalizadorLexico implements AnalizadorLexicoConstants {
     numero++;
     grabarDatosPieza(numero, "IDENTIFICADOR", pieza);
       break;
-    case ASIGNACIONPUNTO:
-      pieza = jj_consume_token(ASIGNACIONPUNTO);
-    numero++;
-    grabarDatosPieza(numero, "ASIGNACION . ", pieza);
-      break;
     case ASIGNACIONGUION:
       pieza = jj_consume_token(ASIGNACIONGUION);
     numero++;
-    grabarDatosPieza(numero, "ASIGNACION -> ", pieza);
+    grabarDatosPieza(numero, "ASIGNACION ->", pieza);
+      break;
+    case LLAMADOMET:
+      pieza = jj_consume_token(LLAMADOMET);
+    numero++;
+    grabarDatosPieza(numero, "LLAMADO METODO", pieza);
       break;
     case CONCATENACION:
       pieza = jj_consume_token(CONCATENACION);
     numero++;
     grabarDatosPieza(numero, "CONCATENACION", pieza);
-      break;
-    case FINLINEA:
-      pieza = jj_consume_token(FINLINEA);
-    numero++;
-    grabarDatosPieza(numero, "FIN DE LINEA", pieza);
       break;
     case NOMBREARCHIVO:
       pieza = jj_consume_token(NOMBREARCHIVO);
@@ -352,15 +318,20 @@ public class AnalizadorLexico implements AnalizadorLexicoConstants {
     numero++;
     grabarDatosPieza(numero, "CADENA", pieza);
       break;
-    case COMENTARIO:
-      pieza = jj_consume_token(COMENTARIO);
+    case NUMERO:
+      pieza = jj_consume_token(NUMERO);
     numero++;
-    grabarDatosPieza(numero, "COMENTARIO", pieza);
+    grabarDatosPieza(numero, "NUMERO", pieza);
       break;
-    case NEGRILLA:
-      pieza = jj_consume_token(NEGRILLA);
+    case ININEGRILLA:
+      pieza = jj_consume_token(ININEGRILLA);
     numero++;
-    grabarDatosPieza(numero, "NEGRILLA", pieza);
+    grabarDatosPieza(numero, "ABRIR NEGRILLA", pieza);
+      break;
+    case FINNEGRILLA:
+      pieza = jj_consume_token(FINNEGRILLA);
+    numero++;
+    grabarDatosPieza(numero, "CERRAR NEGRILLA", pieza);
       break;
     default:
       jj_la1[1] = jj_gen;
@@ -387,10 +358,10 @@ public class AnalizadorLexico implements AnalizadorLexicoConstants {
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x7fffffc0,0x7fffffc0,};
+      jj_la1_0 = new int[] {0xbfffff00,0xbfffff00,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x7fc,0x7fc,};
+      jj_la1_1 = new int[] {0xff4,0xff4,};
    }
 
   /** Constructor with InputStream. */
@@ -528,7 +499,7 @@ public class AnalizadorLexico implements AnalizadorLexicoConstants {
   /** Generate ParseException. */
   static public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[43];
+    boolean[] la1tokens = new boolean[44];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
@@ -545,7 +516,7 @@ public class AnalizadorLexico implements AnalizadorLexicoConstants {
         }
       }
     }
-    for (int i = 0; i < 43; i++) {
+    for (int i = 0; i < 44; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;

@@ -14,7 +14,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-
 import javax.swing.JOptionPane;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -22,7 +21,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class AnalizadorLexico
 {
   static int numero = 0;
-
 
   private static void grabarLexema(int n, String token, String lexema, int nL, int nC)
   {
@@ -41,10 +39,8 @@ public class AnalizadorLexico
   {
     System.out.println("---------- INICIANDO AN\u00c1LISIS L\u00c9XICO ----------");
     System.out.println("Ingrese el c\u00f3digo a analizar:");
-    
     AnalizadorLexico parser = new AnalizadorLexico(System.in);
     parser.TokenList();
-
     System.out.println("Analisis terminado:");
     System.out.println("no se han hallado errores l\u00e9xicos");
   }
@@ -53,25 +49,21 @@ public class AnalizadorLexico
 	* Metodo para leer el codigo desde un archivo
 	*/
   private static void leerArchivo() throws IOException, ParseException
-  { 
+  {
     /**llamamos el metodo que permite cargar la ventana*/
     JFileChooser file = new JFileChooser();
-    FileNameExtensionFilter filtro=new FileNameExtensionFilter("SHTML","shtml");
+    FileNameExtensionFilter filtro = new FileNameExtensionFilter("SHTML", "shtml");
     file.setFileFilter(filtro);
     file.showOpenDialog(null);
-    
     /**abrimos el archivo seleccionado*/
     File abre = file.getSelectedFile();
-    
     String nombreArchivo = "";
     String texto = "";
     String aux = "";
-    
     /**recorremos el archivo, lo leemos para plasmarlo en el area de texto*/
     if (abre != null)
     {
-      nombreArchivo=abre.getName();
-      
+      nombreArchivo = abre.getName();
       FileReader archivos = new FileReader(abre);
       BufferedReader lee = new BufferedReader(archivos);
       while ((aux = lee.readLine()) != null)
@@ -79,17 +71,12 @@ public class AnalizadorLexico
         texto += aux + "\n";
       }
       lee.close();
-      
     }
-
     InputStream stream = new ByteArrayInputStream(texto.getBytes(StandardCharsets.UTF_8));
-    
     System.out.println("---------- INICIANDO AN\u00c1LISIS L\u00c9XICO PARA EL ARCHIVO " + nombreArchivo + " ----------");
     System.out.println("Ingrese el c\u00f3digo a analizar:");
-    
     AnalizadorLexico parser = new AnalizadorLexico(stream);
     parser.TokenList();
-    
     System.out.println("Analisis terminado:");
     System.out.println("no se han hallado errores l\u00e9xicos");
   }
@@ -111,19 +98,15 @@ public class AnalizadorLexico
         "Bienvenido", "Como deseas analizar el codigo fuente?"
       }
       ;
-      
       int variable = JOptionPane.showOptionDialog(null, mensajes, 
       "Analizador Lexico", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, 
       null, botones, botones [2]);
-
       switch (variable)
       {
         case 0 | - 1 : System.exit(0);
         break;
-        
         case 1 : leerConsola();
         break;
-        
         case 2 : leerArchivo();
         break;
       }
@@ -152,40 +135,138 @@ PARSER_END(AnalizadorLexico)
 SKIP :
 {
   " "
+| < "<" (~[ ">" ])* ">" > //Esto es para saltar los comentarios
 | "\t"
 | "\n"
 | "\r"
 | "\f"
+| ";"
 }
 
-TOKEN : /*PALABRAS RESERVADAS*/
+TOKEN : /*Pagina*/
 {
   < PAGINA : "Pagina" >
-| < TITULO : "Titulo" >
-| < CONTENEDOR : "Contenedor" >
-| < FORMULARIO : "Formulario" >
-| < CAMPOTEXTO : "CampoTexto" >
-| < SELECTOR : "Selector" >
-| < BOTON : "Boton" >
-| < ID : "id" >
-| < ESTILO : "estilo" >
-| < FONDO : "fondo" >
-| < COLOR : "color" >
-| < FUENTE : "fuente" >
-| < TAMFUENTE : "tamFuente" >
-| < TEXTO : "texto" >
-| < MUESTRA : "muestra" >
-| < VALOR : "valor" >
-| < CANTIDAD : "cantidad" >
-| < VALORINTERNO : "valorInterno" >
-| < VALOREXTERNO : "valorExterno" >
-| < SELECCIONADO : "seleccionado" >
-| < INICIO : "-INICIO-" >
-| < FIN : "-FIN-" >
-| < TAMPX : (< DIGIT >)+ "px" >
-| < SOLID : "solid" >
-| < NUMCOLOR : "#" (< NCOL >) (< NCOL >) (< NCOL >) (< NCOL >) (< NCOL >) (< NCOL >) >
-| < #NCOL : [ "0"-"9", "a"-"z", "A"-"Z" ] >
+}
+
+TOKEN : /*Titulo*/
+{
+  < TITULO : "Titulo" >
+}
+
+TOKEN : /*Contenedor*/
+{
+  < CONTENEDOR : "Contenedor" >
+}
+
+TOKEN : /*Formulario*/
+{
+  < FORMULARIO : "Formulario" >
+}
+
+TOKEN : /*Campo de Texto*/
+{
+  < CAMPOTEXTO : "CampoTexto" >
+}
+
+TOKEN : /*Selector*/
+{
+  < SELECTOR : "Selector" >
+}
+
+TOKEN : /*Boton*/
+{
+  < BOTON : "Boton" >
+}
+
+TOKEN : /*ID*/
+{
+  < ID : "id" >
+}
+
+TOKEN : /*Estilo*/
+{
+  < ESTILO : "estilo" >
+}
+
+TOKEN : /*Fondo*/
+{
+  < FONDO : "fondo" >
+}
+
+TOKEN : /*Color*/
+{
+  < COLOR : "color" >
+}
+
+TOKEN : /*Fuente*/
+{
+  < FUENTE : "fuente" >
+}
+
+TOKEN : /*Tamaño de Fuente*/
+{
+  < TAMFUENTE : "tamFuente" >
+}
+
+TOKEN : /*Texto*/
+{
+  < TEXTO : "texto" >
+}
+
+TOKEN : /*Muestra*/
+{
+  < MUESTRA : "muestra" >
+}
+
+TOKEN : /*Valor*/
+{
+  < VALOR : "valor" >
+}
+
+TOKEN : /*Cantidad*/
+{
+  < CANTIDAD : "cantidad" >
+}
+
+TOKEN : /*Valor Interno*/
+{
+  < VALORINTERNO : "valorInterno" >
+}
+
+TOKEN : /*Valor Externo*/
+{
+  < VALOREXTERNO : "valorExterno" >
+}
+
+TOKEN : /*Seleccion*/
+{
+  < SELECCIONADO : "seleccionado" >
+}
+
+TOKEN : /*Inicio*/
+{
+  < INICIO : "-INICIO-" >
+}
+
+TOKEN : /*Fin*/
+{
+  < FIN : "-FIN-" >
+}
+
+TOKEN : /*TamanoFuente*/
+{
+  < TAMPX : (< DIGIT >)+ "px" >
+}
+
+TOKEN : /*Solid*/
+{
+  < SOLID : "solid" >
+}
+
+TOKEN : /*HexColor*/
+{
+  < NUMCOLOR : "#" (< NCOL >) (< NCOL >) (< NCOL >) (< NCOL >) (< NCOL >) (< NCOL >) >
+| < #NCOL : [ "0"-"9", "a"-"f", "A"-"F" ] >
 }
 
 TOKEN : /*NUMEROS EJEMPLO 1, 1234, 987*/
@@ -201,18 +282,25 @@ TOKEN : /*IDENTIFICADORES EJEMPLO a, casa, clase1*/
 
 TOKEN : /*OPERADOR RELACIONAL*/
 {
-  < ASIGNACIONPUNTO : "." >
-| < ASIGNACIONGUION : ("-") (">") >
+  < ASIGNACIONGUION : ("-") (">") >
 | < CONCATENACION 	: "+" >
-| < FINLINEA 		: ";" >
+| < LLAMADOMET 		: "." >
 }
 
-TOKEN : /*Otros*/
+TOKEN : /*Negrilla*/
 {
-  < CADENA : 		("\"") ([ "a"-"z", "A"-"Z", "0"-"9", "_", " " ])+ ("\"") >
-| < NOMBREARCHIVO : ([ "a"-"z" ]) ([ "a"-"z", "A"-"Z", "0"-"9", "_" ])* >
-| < COMENTARIO : 	("<") ([ "a"-"z", "A"-"Z", "0"-"9", "_", " " ])+ (">") >
-| < NEGRILLA 	: 	"(" (< CADENA >) ")" >
+  < ININEGRILLA : 	"(" >
+| < FINNEGRILLA : 	")" >
+}
+
+TOKEN : /*Nombre de Archivo*/
+{
+  < NOMBREARCHIVO : ([ "a"-"z", "A"-"Z" ]) ([ "a"-"z", "A"-"Z", "0"-"9", "_" ])* >
+}
+
+TOKEN : /*Cadena*/
+{
+  < CADENA : 		("\"") "<" (~[ "\"" ])* ">" ("\"") >
 }
 
 /**
@@ -333,20 +421,10 @@ void TokenElement() :
     numero++;
     grabarDatosPieza(numero, "SELECCIONADO", pieza);
   }
-| pieza = < TAMPX >
-  {
-    numero++;
-    grabarDatosPieza(numero, "TAM. PX", pieza);
-  }
 | pieza = < SOLID >
   {
     numero++;
     grabarDatosPieza(numero, "SOLID", pieza);
-  }
-| pieza = < NUMCOLOR >
-  {
-    numero++;
-    grabarDatosPieza(numero, "ESP. COLOR", pieza);
   }
 | pieza = < INICIO >
   {
@@ -363,25 +441,20 @@ void TokenElement() :
     numero++;
     grabarDatosPieza(numero, "IDENTIFICADOR", pieza);
   }
-| pieza = < ASIGNACIONPUNTO >
-  {
-    numero++;
-    grabarDatosPieza(numero, "ASIGNACION . ", pieza);
-  }
 | pieza = < ASIGNACIONGUION >
   {
     numero++;
-    grabarDatosPieza(numero, "ASIGNACION -> ", pieza);
+    grabarDatosPieza(numero, "ASIGNACION ->", pieza);
+  }
+| pieza = < LLAMADOMET >
+  {
+    numero++;
+    grabarDatosPieza(numero, "LLAMADO METODO", pieza);
   }
 | pieza = < CONCATENACION >
   {
     numero++;
     grabarDatosPieza(numero, "CONCATENACION", pieza);
-  }
-| pieza = < FINLINEA >
-  {
-    numero++;
-    grabarDatosPieza(numero, "FIN DE LINEA", pieza);
   }
 | pieza = < NOMBREARCHIVO >
   {
@@ -393,14 +466,19 @@ void TokenElement() :
     numero++;
     grabarDatosPieza(numero, "CADENA", pieza);
   }
-| pieza = < COMENTARIO >
+| pieza = < NUMERO >
   {
     numero++;
-    grabarDatosPieza(numero, "COMENTARIO", pieza);
+    grabarDatosPieza(numero, "NUMERO", pieza);
   }
-| pieza = < NEGRILLA >
+| pieza = < ININEGRILLA >
   {
     numero++;
-    grabarDatosPieza(numero, "NEGRILLA", pieza);
+    grabarDatosPieza(numero, "ABRIR NEGRILLA", pieza);
+  }
+| pieza = < FINNEGRILLA >
+  {
+    numero++;
+    grabarDatosPieza(numero, "CERRAR NEGRILLA", pieza);
   }
 }
