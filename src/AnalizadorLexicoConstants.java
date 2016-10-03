@@ -9,81 +9,83 @@ public interface AnalizadorLexicoConstants {
   /** End of File. */
   int EOF = 0;
   /** RegularExpression Id. */
-  int PAGINA = 8;
+  int PAGINA = 7;
   /** RegularExpression Id. */
-  int TITULO = 9;
+  int TITULO = 8;
   /** RegularExpression Id. */
-  int CONTENEDOR = 10;
+  int CONTENEDOR = 9;
   /** RegularExpression Id. */
-  int FORMULARIO = 11;
+  int FORMULARIO = 10;
   /** RegularExpression Id. */
-  int CAMPOTEXTO = 12;
+  int CAMPOTEXTO = 11;
   /** RegularExpression Id. */
-  int SELECTOR = 13;
+  int SELECTOR = 12;
   /** RegularExpression Id. */
-  int BOTON = 14;
+  int BOTON = 13;
   /** RegularExpression Id. */
-  int ID = 15;
+  int ID = 14;
   /** RegularExpression Id. */
-  int ESTILO = 16;
+  int ESTILO = 15;
   /** RegularExpression Id. */
-  int FONDO = 17;
+  int FONDO = 16;
   /** RegularExpression Id. */
-  int COLOR = 18;
+  int COLOR = 17;
   /** RegularExpression Id. */
-  int BORDE = 19;
+  int BORDE = 18;
   /** RegularExpression Id. */
-  int FUENTE = 20;
+  int FUENTE = 19;
   /** RegularExpression Id. */
-  int TAMFUENTE = 21;
+  int TAMFUENTE = 20;
   /** RegularExpression Id. */
-  int TEXTO = 22;
+  int TEXTO = 21;
   /** RegularExpression Id. */
-  int MUESTRA = 23;
+  int MUESTRA = 22;
   /** RegularExpression Id. */
-  int VALOR = 24;
+  int VALOR = 23;
   /** RegularExpression Id. */
-  int CANTIDAD = 25;
+  int CANTIDAD = 24;
   /** RegularExpression Id. */
-  int VALORINTERNO = 26;
+  int VALORINTERNO = 25;
   /** RegularExpression Id. */
-  int VALOREXTERNO = 27;
+  int VALOREXTERNO = 26;
   /** RegularExpression Id. */
-  int SELECCIONADO = 28;
+  int SELECCIONADO = 27;
   /** RegularExpression Id. */
-  int INICIO = 29;
+  int INICIO = 28;
   /** RegularExpression Id. */
-  int FIN = 30;
+  int FIN = 29;
   /** RegularExpression Id. */
-  int TAMPX = 31;
+  int TAMPX = 30;
   /** RegularExpression Id. */
-  int SOLID = 32;
+  int SOLID = 31;
   /** RegularExpression Id. */
-  int NUMCOLOR = 33;
+  int HEXCOLOR = 32;
   /** RegularExpression Id. */
-  int NCOL = 34;
+  int NCOL = 33;
   /** RegularExpression Id. */
-  int NUMERO = 35;
+  int NUMERO = 34;
   /** RegularExpression Id. */
-  int DIGIT = 36;
+  int DIGIT = 35;
   /** RegularExpression Id. */
-  int IDENTIFICADOR = 37;
+  int IDENTIFICADOR = 36;
   /** RegularExpression Id. */
-  int ASIGNACIONGUION = 38;
+  int ASIGNACION = 37;
   /** RegularExpression Id. */
-  int CONCATENACION = 39;
+  int CONCATENACION = 38;
   /** RegularExpression Id. */
-  int LLAMADOMET = 40;
+  int LLAMADOMET = 39;
   /** RegularExpression Id. */
-  int DIVITEM = 41;
+  int DIVITEM = 40;
   /** RegularExpression Id. */
-  int ININEGRILLA = 42;
+  int ININEGRILLA = 41;
   /** RegularExpression Id. */
-  int FINNEGRILLA = 43;
+  int FINNEGRILLA = 42;
   /** RegularExpression Id. */
-  int NOMBREARCHIVO = 44;
+  int NOMBREVARIABLE = 43;
   /** RegularExpression Id. */
-  int CADENA = 45;
+  int CADENA = 44;
+  /** RegularExpression Id. */
+  int SEMIC = 45;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -97,7 +99,6 @@ public interface AnalizadorLexicoConstants {
     "\"\\n\"",
     "\"\\r\"",
     "\"\\f\"",
-    "\";\"",
     "\"Pagina\"",
     "\"Titulo\"",
     "\"Contenedor\"",
@@ -123,19 +124,20 @@ public interface AnalizadorLexicoConstants {
     "\"-FIN-\"",
     "<TAMPX>",
     "\"solid\"",
-    "<NUMCOLOR>",
+    "<HEXCOLOR>",
     "<NCOL>",
     "<NUMERO>",
     "<DIGIT>",
     "<IDENTIFICADOR>",
-    "<ASIGNACIONGUION>",
+    "<ASIGNACION>",
     "\"+\"",
     "\".\"",
     "\":\"",
     "\"(\"",
     "\")\"",
-    "<NOMBREARCHIVO>",
+    "<NOMBREVARIABLE>",
     "<CADENA>",
+    "\";\"",
   };
 
 }

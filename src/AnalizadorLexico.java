@@ -15,7 +15,7 @@ public class AnalizadorLexico implements AnalizadorLexicoConstants {
 
   private static void grabarLexema(int n, String token, String lexema, int nL, int nC)
   {
-    System.out.println(n + "- Token: " + token + ", Lexema:" + lexema + ", Linea: " + nL + ", Columna:" + nC);
+    System.out.println(n + "-\u005ct Token: " + token + ",\u005ct Lexema:" + lexema + ",\u005ct Linea: " + nL + ",\u005ct Columna:" + nC);
   }
 
   private static void grabarDatosPieza(int n, String token, Token pieza)
@@ -31,7 +31,8 @@ public class AnalizadorLexico implements AnalizadorLexicoConstants {
     System.out.println("---------- INICIANDO AN\u00c1LISIS L\u00c9XICO ----------");
     System.out.println("Ingrese el c\u00f3digo a analizar:");
     AnalizadorLexico parser = new AnalizadorLexico(System.in);
-    parser.TokenList();
+//    parser.TokenList();
+        parser.Programa();
     System.out.println("Analisis terminado:");
     System.out.println("no se han hallado errores l\u00e9xicos");
   }
@@ -67,7 +68,8 @@ public class AnalizadorLexico implements AnalizadorLexicoConstants {
     System.out.println("---------- INICIANDO AN\u00c1LISIS L\u00c9XICO PARA EL ARCHIVO " + nombreArchivo + " ----------");
     System.out.println("Ingrese el c\u00f3digo a analizar:");
     AnalizadorLexico parser = new AnalizadorLexico(stream);
-    parser.TokenList();
+//    parser.TokenList();
+        parser.Programa();
     System.out.println("Analisis terminado:");
     System.out.println("no se han hallado errores l\u00e9xicos");
   }
@@ -119,249 +121,243 @@ public class AnalizadorLexico implements AnalizadorLexicoConstants {
     }
   }
 
-/**
- * Reconoce el contenido completo de un archivo
- *
- * TokenList -> (TokenElement)* 
- */
-  static final public void TokenList() throws ParseException {
-    label_1:
-    while (true) {
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case PAGINA:
-      case TITULO:
-      case CONTENEDOR:
-      case FORMULARIO:
-      case CAMPOTEXTO:
-      case SELECTOR:
-      case BOTON:
-      case ID:
-      case ESTILO:
-      case FONDO:
-      case COLOR:
-      case BORDE:
-      case FUENTE:
-      case TAMFUENTE:
-      case TEXTO:
-      case MUESTRA:
-      case VALOR:
-      case CANTIDAD:
-      case VALORINTERNO:
-      case VALOREXTERNO:
-      case SELECCIONADO:
-      case INICIO:
-      case FIN:
-      case TAMPX:
-      case SOLID:
-      case NUMCOLOR:
-      case NUMERO:
-      case IDENTIFICADOR:
-      case ASIGNACIONGUION:
-      case CONCATENACION:
-      case LLAMADOMET:
-      case DIVITEM:
-      case ININEGRILLA:
-      case FINNEGRILLA:
-      case NOMBREARCHIVO:
-      case CADENA:
-        ;
-        break;
-      default:
-        jj_la1[0] = jj_gen;
-        break label_1;
-      }
-      TokenElement();
+// ------------------------------------------------------------
+// -- ANALIZADOR LEXICO ---------------------------------------
+// ------------------------------------------------------------
+  static final public void Programa() throws ParseException {
+    NombrePagina();
+    TituloPagina();
+    CuerpoPrograma();
+    jj_consume_token(0);
+  }
+
+  static final public void NombrePagina() throws ParseException {
+    jj_consume_token(PAGINA);
+    jj_consume_token(NOMBREVARIABLE);
+    jj_consume_token(SEMIC);
+  }
+
+  static final public void TituloPagina() throws ParseException {
+    jj_consume_token(TITULO);
+    jj_consume_token(ASIGNACION);
+    jj_consume_token(CADENA);
+    jj_consume_token(SEMIC);
+  }
+
+  static final public void CuerpoPrograma() throws ParseException {
+    jj_consume_token(INICIO);
+    ListadoSentencias();
+    jj_consume_token(FIN);
+  }
+
+  static final public void ListadoSentencias() throws ParseException {
+    Sentencia();
+    jj_consume_token(SEMIC);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case CONTENEDOR:
+    case FORMULARIO:
+    case CAMPOTEXTO:
+    case SELECTOR:
+    case BOTON:
+    case NOMBREVARIABLE:
+      ListadoSentencias();
+      break;
+    default:
+      jj_la1[0] = jj_gen;
+      ;
     }
   }
 
-  static final public void TokenElement() throws ParseException {
-  Token pieza;
+  static final public void Sentencia() throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case PAGINA:
-      pieza = jj_consume_token(PAGINA);
-    numero++;
-    grabarDatosPieza(numero, "PAGINA", pieza);
-      break;
-    case TITULO:
-      pieza = jj_consume_token(TITULO);
-    numero++;
-    grabarDatosPieza(numero, "TITULO", pieza);
-      break;
     case CONTENEDOR:
-      pieza = jj_consume_token(CONTENEDOR);
-    numero++;
-    grabarDatosPieza(numero, "CONTENEDOR", pieza);
-      break;
     case FORMULARIO:
-      pieza = jj_consume_token(FORMULARIO);
-    numero++;
-    grabarDatosPieza(numero, "FORMULARIO", pieza);
-      break;
     case CAMPOTEXTO:
-      pieza = jj_consume_token(CAMPOTEXTO);
-    numero++;
-    grabarDatosPieza(numero, "CAMPO TEXTO", pieza);
-      break;
     case SELECTOR:
-      pieza = jj_consume_token(SELECTOR);
-    numero++;
-    grabarDatosPieza(numero, "SELECTOR", pieza);
-      break;
     case BOTON:
-      pieza = jj_consume_token(BOTON);
-    numero++;
-    grabarDatosPieza(numero, "BOTON", pieza);
+      Declaracion();
       break;
-    case ID:
-      pieza = jj_consume_token(ID);
-    numero++;
-    grabarDatosPieza(numero, "ID", pieza);
-      break;
-    case TAMPX:
-      pieza = jj_consume_token(TAMPX);
-    numero++;
-    grabarDatosPieza(numero, "TAMA\u00d1O FUENTE", pieza);
-      break;
-    case ESTILO:
-      pieza = jj_consume_token(ESTILO);
-    numero++;
-    grabarDatosPieza(numero, "ESTILO", pieza);
-      break;
-    case FONDO:
-      pieza = jj_consume_token(FONDO);
-    numero++;
-    grabarDatosPieza(numero, "FONDO", pieza);
-      break;
-    case COLOR:
-      pieza = jj_consume_token(COLOR);
-    numero++;
-    grabarDatosPieza(numero, "COLOR", pieza);
-      break;
-    case BORDE:
-      pieza = jj_consume_token(BORDE);
-    numero++;
-    grabarDatosPieza(numero, "BORDE", pieza);
-      break;
-    case NUMCOLOR:
-      pieza = jj_consume_token(NUMCOLOR);
-    numero++;
-    grabarDatosPieza(numero, "COLOR HEXADECIMAL", pieza);
-      break;
-    case FUENTE:
-      pieza = jj_consume_token(FUENTE);
-    numero++;
-    grabarDatosPieza(numero, "FUENTE", pieza);
-      break;
-    case TAMFUENTE:
-      pieza = jj_consume_token(TAMFUENTE);
-    numero++;
-    grabarDatosPieza(numero, "TAM. FUENTE", pieza);
-      break;
-    case TEXTO:
-      pieza = jj_consume_token(TEXTO);
-    numero++;
-    grabarDatosPieza(numero, "TEXTO", pieza);
-      break;
-    case MUESTRA:
-      pieza = jj_consume_token(MUESTRA);
-    numero++;
-    grabarDatosPieza(numero, "MUESTRA", pieza);
-      break;
-    case VALOR:
-      pieza = jj_consume_token(VALOR);
-    numero++;
-    grabarDatosPieza(numero, "VALOR", pieza);
-      break;
-    case CANTIDAD:
-      pieza = jj_consume_token(CANTIDAD);
-    numero++;
-    grabarDatosPieza(numero, "CANTIDAD", pieza);
-      break;
-    case VALORINTERNO:
-      pieza = jj_consume_token(VALORINTERNO);
-    numero++;
-    grabarDatosPieza(numero, "VALOR INTERNO", pieza);
-      break;
-    case VALOREXTERNO:
-      pieza = jj_consume_token(VALOREXTERNO);
-    numero++;
-    grabarDatosPieza(numero, "VALOR EXTERNO", pieza);
-      break;
-    case SELECCIONADO:
-      pieza = jj_consume_token(SELECCIONADO);
-    numero++;
-    grabarDatosPieza(numero, "SELECCIONADO", pieza);
-      break;
-    case SOLID:
-      pieza = jj_consume_token(SOLID);
-    numero++;
-    grabarDatosPieza(numero, "SOLID", pieza);
-      break;
-    case INICIO:
-      pieza = jj_consume_token(INICIO);
-    numero++;
-    grabarDatosPieza(numero, "INICIO", pieza);
-      break;
-    case FIN:
-      pieza = jj_consume_token(FIN);
-    numero++;
-    grabarDatosPieza(numero, "FIN", pieza);
-      break;
-    case IDENTIFICADOR:
-      pieza = jj_consume_token(IDENTIFICADOR);
-    numero++;
-    grabarDatosPieza(numero, "IDENTIFICADOR", pieza);
-      break;
-    case ASIGNACIONGUION:
-      pieza = jj_consume_token(ASIGNACIONGUION);
-    numero++;
-    grabarDatosPieza(numero, "ASIGNACION ->", pieza);
-      break;
-    case LLAMADOMET:
-      pieza = jj_consume_token(LLAMADOMET);
-    numero++;
-    grabarDatosPieza(numero, "LLAMADO METODO", pieza);
-      break;
-    case CONCATENACION:
-      pieza = jj_consume_token(CONCATENACION);
-    numero++;
-    grabarDatosPieza(numero, "CONCATENACION", pieza);
-      break;
-    case NOMBREARCHIVO:
-      pieza = jj_consume_token(NOMBREARCHIVO);
-    numero++;
-    grabarDatosPieza(numero, "NOMBRE ARCHIVO", pieza);
-      break;
-    case CADENA:
-      pieza = jj_consume_token(CADENA);
-    numero++;
-    grabarDatosPieza(numero, "CADENA", pieza);
-      break;
-    case NUMERO:
-      pieza = jj_consume_token(NUMERO);
-    numero++;
-    grabarDatosPieza(numero, "NUMERO", pieza);
-      break;
-    case ININEGRILLA:
-      pieza = jj_consume_token(ININEGRILLA);
-    numero++;
-    grabarDatosPieza(numero, "ABRIR NEGRILLA", pieza);
-      break;
-    case FINNEGRILLA:
-      pieza = jj_consume_token(FINNEGRILLA);
-    numero++;
-    grabarDatosPieza(numero, "CERRAR NEGRILLA", pieza);
-      break;
-    case DIVITEM:
-      pieza = jj_consume_token(DIVITEM);
-    numero++;
-    grabarDatosPieza(numero, "DIVISOR DE ITEMS", pieza);
+    case NOMBREVARIABLE:
+      Asignacion();
       break;
     default:
       jj_la1[1] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
+  }
+
+  static final public void Declaracion() throws ParseException {
+    TipoDato();
+    Identificador();
+  }
+
+  static final public void TipoDato() throws ParseException {
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case CONTENEDOR:
+      jj_consume_token(CONTENEDOR);
+      break;
+    case FORMULARIO:
+      jj_consume_token(FORMULARIO);
+      break;
+    case SELECTOR:
+      jj_consume_token(SELECTOR);
+      break;
+    case CAMPOTEXTO:
+      jj_consume_token(CAMPOTEXTO);
+      break;
+    case BOTON:
+      jj_consume_token(BOTON);
+      break;
+    default:
+      jj_la1[2] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+  }
+
+  static final public void Asignacion() throws ParseException {
+    Identificador();
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case LLAMADOMET:
+      jj_consume_token(LLAMADOMET);
+      Atributo();
+      break;
+    default:
+      jj_la1[3] = jj_gen;
+      ;
+    }
+    jj_consume_token(ASIGNACION);
+    Expresion();
+  }
+
+  static final public void Atributo() throws ParseException {
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case ESTILO:
+      jj_consume_token(ESTILO);
+      jj_consume_token(ASIGNACION);
+      AtributoInterno();
+      break;
+    case ID:
+      jj_consume_token(ID);
+      break;
+    case MUESTRA:
+      jj_consume_token(MUESTRA);
+      break;
+    case VALOR:
+      jj_consume_token(VALOR);
+      break;
+    case VALORINTERNO:
+      jj_consume_token(VALORINTERNO);
+      break;
+    case VALOREXTERNO:
+      jj_consume_token(VALOREXTERNO);
+      break;
+    case CANTIDAD:
+      jj_consume_token(CANTIDAD);
+      break;
+    case SELECCIONADO:
+      jj_consume_token(SELECCIONADO);
+      break;
+    case TEXTO:
+      jj_consume_token(TEXTO);
+      break;
+    default:
+      jj_la1[4] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+  }
+
+  static final public void AtributoInterno() throws ParseException {
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case FONDO:
+      jj_consume_token(FONDO);
+      break;
+    case COLOR:
+      jj_consume_token(COLOR);
+      break;
+    case BORDE:
+      jj_consume_token(BORDE);
+      break;
+    case TAMFUENTE:
+      jj_consume_token(TAMFUENTE);
+      break;
+    case FUENTE:
+      jj_consume_token(FUENTE);
+      break;
+    default:
+      jj_la1[5] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+  }
+
+  static final public void Expresion() throws ParseException {
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case HEXCOLOR:
+      jj_consume_token(HEXCOLOR);
+      break;
+    case BORDE:
+      jj_consume_token(BORDE);
+      break;
+    case CADENA:
+      jj_consume_token(CADENA);
+      break;
+    case FUENTE:
+      jj_consume_token(FUENTE);
+      break;
+    case TAMFUENTE:
+      jj_consume_token(TAMFUENTE);
+      break;
+    case CONCATENACION:
+      jj_consume_token(CONCATENACION);
+      break;
+    case NUMERO:
+      jj_consume_token(NUMERO);
+      break;
+      ArregloTipo1();
+      break;
+    case NOMBREVARIABLE:
+      ArregloTipo2();
+      break;
+      jj_consume_token(NOMBREVARIABLE);
+      break;
+    default:
+      jj_la1[6] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+  }
+
+  static final public void ArregloTipo1() throws ParseException {
+    jj_consume_token(CADENA);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case DIVITEM:
+      jj_consume_token(DIVITEM);
+      ArregloTipo1();
+      break;
+    default:
+      jj_la1[7] = jj_gen;
+      ;
+    }
+  }
+
+  static final public void ArregloTipo2() throws ParseException {
+    jj_consume_token(NOMBREVARIABLE);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case DIVITEM:
+      jj_consume_token(DIVITEM);
+      ArregloTipo2();
+      break;
+    default:
+      jj_la1[8] = jj_gen;
+      ;
+    }
+  }
+
+  static final public void Identificador() throws ParseException {
+    jj_consume_token(NOMBREVARIABLE);
   }
 
   static private boolean jj_initialized_once = false;
@@ -374,7 +370,7 @@ public class AnalizadorLexico implements AnalizadorLexicoConstants {
   static public Token jj_nt;
   static private int jj_ntk;
   static private int jj_gen;
-  static final private int[] jj_la1 = new int[2];
+  static final private int[] jj_la1 = new int[9];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -382,10 +378,10 @@ public class AnalizadorLexico implements AnalizadorLexicoConstants {
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0xffffff00,0xffffff00,};
+      jj_la1_0 = new int[] {0x3e00,0x3e00,0x3e00,0x0,0xfe0c000,0x1f0000,0x1c0000,0x0,0x0,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x3feb,0x3feb,};
+      jj_la1_1 = new int[] {0x800,0x800,0x0,0x80,0x0,0x0,0x1845,0x100,0x100,};
    }
 
   /** Constructor with InputStream. */
@@ -406,7 +402,7 @@ public class AnalizadorLexico implements AnalizadorLexicoConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 2; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 9; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -420,7 +416,7 @@ public class AnalizadorLexico implements AnalizadorLexicoConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 2; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 9; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -437,7 +433,7 @@ public class AnalizadorLexico implements AnalizadorLexicoConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 2; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 9; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -447,7 +443,7 @@ public class AnalizadorLexico implements AnalizadorLexicoConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 2; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 9; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -463,7 +459,7 @@ public class AnalizadorLexico implements AnalizadorLexicoConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 2; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 9; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -472,7 +468,7 @@ public class AnalizadorLexico implements AnalizadorLexicoConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 2; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 9; i++) jj_la1[i] = -1;
   }
 
   static private Token jj_consume_token(int kind) throws ParseException {
@@ -528,7 +524,7 @@ public class AnalizadorLexico implements AnalizadorLexicoConstants {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < 9; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {
