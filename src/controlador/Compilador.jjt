@@ -1,0 +1,472 @@
+/**
+ * JavaCC template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
+ */
+options
+{
+  static = true;
+}
+
+PARSER_BEGIN(Compilador)
+package controlador;
+
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+public class Compilador
+{
+  private static ArrayList < String > listaSimbolos;
+  static int numero = 0;
+
+  public Compilador()
+  {
+    listaSimbolos = new ArrayList < String > ();
+  }
+
+  public ArrayList < String > getListaSimbolos()
+  {
+    return listaSimbolos;
+  }
+
+  private static void grabarLexema(int n, String token, String lexema, int nL, int nC)
+  {
+    String simbolo = "";
+    simbolo = token + ";" + lexema;
+    listaSimbolos.add(simbolo);
+    System.out.println(n + "-\t Token: " + token + ",\t Lexema:" + lexema + ",\t Linea: " + nL + ",\t Columna:" + nC);
+  }
+
+  private static void grabarDatosPieza(int n, String token, Token pieza)
+  {
+    grabarLexema(n, token, pieza.image, pieza.beginLine, pieza.beginColumn);
+  }
+
+  /**
+	* Metodo para leer el codigo desde la consola
+	*/
+  private static void leerConsola() throws ParseException
+  {
+    System.out.println("---------- INICIANDO AN\u00c1LISIS L\u00c9XICO ----------");
+    System.out.println("Ingrese el c\u00f3digo a analizar:");
+    Compilador parser = new Compilador(System.in);
+    //    parser.TokenList();
+    parser.Programa();
+    System.out.println("Analisis terminado:");
+    System.out.println("no se han hallado errores l\u00e9xicos");
+  }
+
+  /**
+	* Metodo para leer el codigo desde un archivo
+	*/
+  private static void leerArchivo() throws IOException, ParseException
+  {
+    /**llamamos el metodo que permite cargar la ventana*/
+    JFileChooser file = new JFileChooser();
+    FileNameExtensionFilter filtro = new FileNameExtensionFilter("SHTML", "shtml");
+    file.setFileFilter(filtro);
+    file.showOpenDialog(null);
+    /**abrimos el archivo seleccionado*/
+    File abre = file.getSelectedFile();
+    String nombreArchivo = "";
+    String texto = "";
+    String aux = "";
+    /**recorremos el archivo, lo leemos para plasmarlo en el area de texto*/
+    if (abre != null)
+    {
+      nombreArchivo = abre.getName();
+      FileReader archivos = new FileReader(abre);
+      BufferedReader lee = new BufferedReader(archivos);
+      while ((aux = lee.readLine()) != null)
+      {
+        texto += aux + "\n";
+      }
+      lee.close();
+    }
+    InputStream stream = new ByteArrayInputStream(texto.getBytes(StandardCharsets.UTF_8));
+    System.out.println("---------- INICIANDO AN\u00c1LISIS L\u00c9XICO PARA EL ARCHIVO " + nombreArchivo + " ----------");
+    System.out.println("Ingrese el c\u00f3digo a analizar:");
+    Compilador parser = new Compilador(stream);
+    //    parser.TokenList();
+    parser.Programa();
+    System.out.println("Analisis terminado:");
+    System.out.println("no se han hallado errores l\u00e9xicos");
+  }
+
+  /**
+	* Metodo principal
+	*/
+  public static void main(String args []) throws ParseException, IOException
+  {
+    try
+    {
+      Object [] botones =
+      {
+        "Salir", "Por Consola", "Seleccionar un archivo .shtml"
+      }
+      ;
+      Object [] mensajes =
+      {
+        "Bienvenido", "Como deseas analizar el codigo fuente?"
+      }
+      ;
+      int variable = JOptionPane.showOptionDialog(null, mensajes, 
+      "Analizador Lexico", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, 
+      null, botones, botones [2]);
+      switch (variable)
+      {
+        case 0 | - 1 : System.exit(0);
+        break;
+        case 1 : leerConsola();
+        break;
+        case 2 : leerArchivo();
+        break;
+      }
+    }
+    catch (TokenMgrError te)
+    {
+      System.err.println("Se han encontrado errores lexicos.");
+      System.err.println(te.getMessage());
+    }
+    catch (ParseException e)
+    {
+      System.err.println("Analizador: Se han encontrado errores en el analisis.");
+      System.err.println(e.getMessage());	
+    }
+    catch (IOException ex)
+    {
+      System.err.println("Cargar: El archivo no se ha podido cargar.");
+      System.err.println(ex.getMessage());
+    }
+  }
+}
+
+PARSER_END(Compilador)
+
+
+// ------------------------------------------------------------
+// -- ANALIZADOR SINTACTICO -----------------------------------
+// ------------------------------------------------------------
+SimpleNode Programa() : { }
+{
+  NombrePagina() TituloPagina() CuerpoPrograma() < EOF > { return jjtThis; }
+}
+
+void NombrePagina() : { Token t; }
+{
+  t=< PAGINA >{jjtThis.value = t.image;} #Pagina(true) t=< NOMBREARCHIVO >{jjtThis.value = t.image;} #NombreArchivo(true) < SEMIC >
+}
+
+void TituloPagina() : { Token t; }
+{
+  t=< TITULO >{jjtThis.value = t.image;} #Titulo(true) < ASIGNACION > t=< CADENA >{jjtThis.value = t.image;} #PuntoyComa(true) < SEMIC >
+}
+
+void CuerpoPrograma() : { Token t; }
+{
+  t=< INICIO >{jjtThis.value = t.image;} #Inicio(true) ListadoSentencias() t=< FIN >{jjtThis.value = t.image;} #Fin(true)
+}
+
+void ListadoSentencias() : { Token t; }
+{
+  Sentencia() < SEMIC > [ ListadoSentencias() ]
+}
+
+void Sentencia() : { }
+{
+  Declaracion()
+| Asignacion()
+}
+
+void Declaracion() : { Token t; }
+{
+  TipoDato() t=< IDENTIFICADOR >{jjtThis.value = t.image;} #Identificador(true)
+}
+
+void TipoDato() : { Token t; }
+{
+  t=< CONTENEDOR >	{jjtThis.value = t.image;} #Contenedor(true)
+| t=< FORMULARIO >	{jjtThis.value = t.image;} #Formulario(true)
+| t=< SELECTOR >	{jjtThis.value = t.image;} #Selector(true)
+| t=< CAMPOTEXTO >	{jjtThis.value = t.image;} #CampoTexto(true)
+| t=< BOTON >		{jjtThis.value = t.image;} #Boton(true)
+}
+
+void Asignacion() : { Token t; }
+{
+  t=< IDENTIFICADOR >{jjtThis.value = t.image;} #Ident(true) [ t=< LLAMADOMET >{jjtThis.value = t.image;} #LlamMet(true) Atributo() ] < ASIGNACION > Expresion()
+}
+
+void Atributo() : { Token t; }
+{
+  t=< ESTILO > {jjtThis.value = t.image;} #Estilo(true) < ASIGNACION > AtributoInterno()
+| t=< ID >			{jjtThis.value = t.image;} #Id(true)
+| t=< MUESTRA >		{jjtThis.value = t.image;} #Muestra(true)
+| t=< VALOR >		{jjtThis.value = t.image;} #Valor(true)
+| t=< VALORINTERNO >{jjtThis.value = t.image;} #ValorInt(true)
+| t=< VALOREXTERNO >{jjtThis.value = t.image;} #ValorExt(true)
+| t=< CANTIDAD >	{jjtThis.value = t.image;} #Cantidad(true)
+| t=< SELECCIONADO >{jjtThis.value = t.image;} #Seleccionado(true)
+| t=< TEXTO >		{jjtThis.value = t.image;} #Texto(true)
+}
+
+void AtributoInterno() : { Token t; }
+{
+  t=< FONDO >		{jjtThis.value = t.image;} #Fondo(true)
+| t=< COLOR >		{jjtThis.value = t.image;} #Color(true)
+| t=< BORDE >		{jjtThis.value = t.image;} #Borde(true)
+| t=< TAMFUENTE >	{jjtThis.value = t.image;} #TamFuente(true)
+| t=< FUENTE >		{jjtThis.value = t.image;} #Fuente(true)
+}
+
+void Expresion() : { Token t; }
+{
+  t=< HEXCOLOR >	{jjtThis.value = t.image;} #HexColor(true)
+| ExpBorde()
+| t=< CADENA >	{jjtThis.value = t.image;} #Cadena(true)
+| t=< FUENTE >	{jjtThis.value = t.image;} #Fuente(true)
+| t=< TAMPX >		{jjtThis.value = t.image;} #TamPX(true)
+| Concatenacion()
+| Arreglo()
+| t=< NUMERO >	{jjtThis.value = t.image;} #Numero(true)
+
+}
+
+void Arreglo() : { }
+{
+  ArregloTipo1() | ArregloTipo2()
+}
+
+
+void ArregloTipo1() : { Token t; }
+{
+  t=< CADENA >{jjtThis.value = t.image;} #Cadena(true) [ t=<DIVITEM>{jjtThis.value = t.image;} #DivItem(true) ArregloTipo1() ]
+}
+
+void ArregloTipo2() : { Token t; }
+{
+  t=< IDENTIFICADOR >{jjtThis.value = t.image;} #Identificador(true) [ t=<DIVITEM>{jjtThis.value = t.image;} #PuntoyComa(true) ArregloTipo2() ]
+}
+
+
+void Concatenacion() : { }
+{
+  ConcatenacionTexto() | ConcatenacionId()
+}
+
+void ConcatenacionTexto() : { Token t; }
+{
+  t=<CADENA>{jjtThis.value = t.image;} #Cadena(true) [ t=<CONCATENADOR>{jjtThis.value = t.image;} #Concatenador(true) ConcatenacionTexto() ]
+}
+
+void ConcatenacionId() : { Token t; }
+{
+  t=< IDENTIFICADOR >{jjtThis.value = t.image;} #Identificador(true) [ t=< CONCATENADOR >{jjtThis.value = t.image;} #Concatenador(true) ConcatenacionId() ]  
+}
+
+void ExpBorde() : { Token t; }
+{
+  t=< TAMFUENTE >{jjtThis.value = t.image;} #TamFuente(true) [ < SOLID >{jjtThis.value = t.image;} #Solid(true) ][ t=< HEXCOLOR >{jjtThis.value = t.image;} #HexColor(true) ]
+}
+
+
+
+// ------------------------------------------------------------
+// -- ANALIZADOR LEXICO ---------------------------------------
+// ------------------------------------------------------------
+
+/* Espacio en blanco, saltos de linea, tabulares */
+SKIP :
+{
+  " "
+  
+// Esto es para saltar los comentarios
+| < "<" (~[ ">" ])* ">" > 
+
+| "\t"
+| "\n"
+| "\r"
+| "\f"
+}
+
+TOKEN : /*Pagina*/
+{
+  < PAGINA : "Pagina" >
+}
+
+TOKEN : /*Titulo*/
+{
+  < TITULO : "Titulo" >
+}
+
+TOKEN : /*Contenedor*/
+{
+  < CONTENEDOR : "Contenedor" >
+}
+
+TOKEN : /*Formulario*/
+{
+  < FORMULARIO : "Formulario" >
+}
+
+TOKEN : /*Campo de Texto*/
+{
+  < CAMPOTEXTO : "CampoTexto" >
+}
+
+TOKEN : /*Selector*/
+{
+  < SELECTOR : "Selector" >
+}
+
+TOKEN : /*Boton*/
+{
+  < BOTON : "Boton" >
+}
+
+TOKEN : /*ID*/
+{
+  < ID : "id" >
+}
+
+TOKEN : /*Estilo*/
+{
+  < ESTILO : "estilo" >
+}
+
+TOKEN : /*Fondo*/
+{
+  < FONDO : "fondo" >
+}
+
+TOKEN : /*Color*/
+{
+  < COLOR : "color" >
+}
+
+TOKEN : /*Borde*/
+{
+  < BORDE : "borde" >
+}
+
+TOKEN : /*Fuente*/
+{
+  < FUENTE : "fuente" >
+}
+
+TOKEN : /*Tamaño de Fuente*/
+{
+  < TAMFUENTE : "tamFuente" >
+}
+
+TOKEN : /*Texto*/
+{
+  < TEXTO : "texto" >
+}
+
+TOKEN : /*Muestra*/
+{
+  < MUESTRA : "muestra" >
+}
+
+TOKEN : /*Valor*/
+{
+  < VALOR : "valor" >
+}
+
+TOKEN : /*Cantidad*/
+{
+  < CANTIDAD : "cantidad" >
+}
+
+TOKEN : /*Valor Interno*/
+{
+  < VALORINTERNO : "valorInterno" >
+}
+
+TOKEN : /*Valor Externo*/
+{
+  < VALOREXTERNO : "valorExterno" >
+}
+
+TOKEN : /*Seleccion*/
+{
+  < SELECCIONADO : "seleccionado" >
+}
+
+TOKEN : /*Inicio*/
+{
+  < INICIO : "-INICIO-" >
+}
+
+TOKEN : /*Fin*/
+{
+  < FIN : "-FIN-" >
+}
+
+TOKEN : /*TamanoFuente*/
+{
+  < TAMPX : (< DIGIT >)+ ("px") >
+}
+
+TOKEN : /*Solid*/
+{
+  < SOLID : "solid" >
+}
+
+TOKEN : /*HexColor*/
+{
+  < HEXCOLOR : "#" (< NCOL >) (< NCOL >) (< NCOL >) (< NCOL >) (< NCOL >) (< NCOL >) >
+| < #NCOL : [ "0"-"9", "a"-"f", "A"-"F" ] >
+}
+
+TOKEN : /*NUMEROS EJEMPLO 1, 1234, 987*/
+{
+  < NUMERO : (< DIGIT >)+ >
+| < #DIGIT : [ "0"-"9" ] >
+}
+
+TOKEN : /*IDENTIFICADORES EJEMPLO a, casa, clase1*/
+{
+  < IDENTIFICADOR : "_" ([ "a"-"z" ]) ([ "a"-"z", "A"-"Z", "0"-"9", "_" ])* >
+}
+
+TOKEN : /*OPERADOR RELACIONAL*/
+{
+  < ASIGNACION 		: ("-") (">") >
+| < CONCATENADOR 	: "+" >
+| < LLAMADOMET 		: "." >
+}
+
+TOKEN : /*Division de items en una lista*/
+{
+  < DIVITEM 	: ":" >
+}
+
+TOKEN : /*Negrilla*/
+{
+  < ININEGRILLA : 	"(" >
+| < FINNEGRILLA : 	")" >
+}
+
+TOKEN : // Nombre de una variable
+{
+  < NOMBREARCHIVO : ([ "a"-"z", "A"-"Z" ]) ([ "a"-"z", "A"-"Z", "0"-"9", "_" ])* >
+}
+
+TOKEN : /*Cadena*/
+{
+  < CADENA : ("\"") (~[ "\"" ])* ("\"") >
+}
+
+TOKEN : /*Fin de linea ; */
+{
+  < SEMIC : (";") >
+}

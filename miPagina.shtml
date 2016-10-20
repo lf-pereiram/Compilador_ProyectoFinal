@@ -1,0 +1,62 @@
+Pagina mipagina;
+Titulo -> "Página de prueba";
+-INICIO-
+
+<Este es el contenedor principal>
+Contenedor _conppal;
+
+_conppal.id -> Principal;
+_conppal.estilo.fondo -> #FF0000;
+_conppal.estilo.color -> #00FF00;
+_conppal.estilo.borde -> 1px solid #000000;
+
+<Contendor que va dentro del principal>
+Contenedor _conint1;
+_conint1.id -> textoFormulario;
+_conint1.estilo.color -> #0000FF;
+_conint1.estilo.fuente -> Arial;
+_conint1.estilo.tamFuente -> 12px;
+_conint1.texto -> "Este es un formulario que no hace"+ ("nada");
+
+<Creamos el formulario>
+Formulario _form;
+_form.id -> MiFormulario;
+
+<Creamos 2 campos de texto>
+CampoTexto _campTex1;
+_campTex1.id -> nombre;
+_campTex1.muestra -> "Nombre";
+
+CampoTexto _campTex2;
+_campTex2.id -> apellido;
+_campTex2.muestra -> "Apellido";
+_campTex2.valor -> "Peres Galan";
+
+<Creamos dos selectores>
+Selector _selector1;
+_selector1.id -> "EstadoCivil";
+_selector1.cantidad -> 3;
+_selector1.muestra -> "Estado Civil";
+_selector1.valorInterno -> cas:sol:div;
+_selector1.valorExterno -> "Casado":"Soltero":"Divorciado";
+_selector1.seleccionado -> sol;
+Selector -> _selector2;
+_selector2.id -> cantHijos;
+_selector2.cantidad -> 4;
+_selector2.muestra -> "Cantidad Hijos";
+_selector2.valorInterno -> 0:1:2:3;
+_selector2.valorExterno -> "Ninguno:Entre 1 y 2":"Entre 3 y 5":"Más de 5";
+_selector2.seleccionado -> 0;
+<Creamos el botón>
+Boton _boton;
+_boton.id -> miBoton;
+_boton.estilo.fondo -> #FBFBFB;
+_boton.texto -> "Enviar";
+
+<Adicionamos al formulario los campos de texto y los selectores>
+_form.contenido -> _campTex1 + _campTex2 + _selector1 + _selector2 + _boton;
+
+<Adicionamos al contenedor principal el contenedor con texto y el formulario>
+_conppal -> _conint1 + _form;
+
+-FIN-

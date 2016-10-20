@@ -5,4 +5,7 @@
 /SimpleCharStream.java
 /Token.java
 /TokenMgrError.java
-/views/
+/CompiladorConstants.java
+/.gitignore
+/controlador/
+/vistas/
